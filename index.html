@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Video Generator</title>
+</head>
+
+<body style="background:black;color:white;text-align:center;">
+
+<h2>🎬 AI Generator (LIVE)</h2>
+
+<input id="topic" placeholder="Enter topic"><br><br>
+<button onclick="generate()">Generate</button>
+
+<div id="output"></div>
+
+<script>
+async function generate(){
+  let topic = document.getElementById("topic").value;
+
+  let res = await fetch("/api", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({topic})
+  });
+
+  let data = await res.json();
+
+  if(data.error){
+    document.getElementById("output").innerHTML = data.error;
+    return;
+  }
+
+  document.getElementById("output").innerHTML =
+    "<h3>Script</h3>"+data.script+
+    "<br><audio controls src='"+data.audio+"'></audio>";
+}
+</script>
+
+</body>
+</html>
